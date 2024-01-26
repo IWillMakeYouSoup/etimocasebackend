@@ -1,13 +1,14 @@
 import { NextFunction, Request, Response } from "express";
+require("dotenv").config();
 
-const verySecureTokenInAVerySecurePlace =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImpvaG4iLCJlbWFpbCI6ImpvaG5AZ21haWwuY29tIn0sImlhdCI6MTcwMTc4NzE0OX0.TSaZdgKMH12wFTZvXW95btbR3dvTapSvcBf0E4Wm-_I";
+const token = process.env.TOKEN;
 
 export const verifyToken = (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
+    console.log(token);
     const authHeader = req.headers["authorization"];
     const thing = "test";
 
@@ -15,8 +16,7 @@ export const verifyToken = (
         const bearer = authHeader.split(" ");
         const bearerToken = bearer[1];
 
-        if (bearerToken === verySecureTokenInAVerySecurePlace)
-            next(); // Token checks out
+        if (bearerToken === token) next(); // Token checks out
         else next({ statusCode: 403, message: "Unauthorized!" });
     } else next({ statusCode: 403, message: "Unauthorized!" });
 };
