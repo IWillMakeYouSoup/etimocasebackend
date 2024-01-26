@@ -8,7 +8,7 @@ export class EmployeeService {
     }
 
     getEmployees = async (): Promise<Employee[]> => {
-        return this.dataHandler.getData("employees");
+        return this.dataHandler.getList("employees");
     };
 
     validateNewEmployee = async ({
@@ -28,7 +28,7 @@ export class EmployeeService {
 
     createEmployee = async (employee: Employee): Promise<Employee> => {
         try {
-            const employees = await this.dataHandler.getData("employees");
+            const employees = await this.dataHandler.getList("employees");
             const emailAlreadyExists = employees.find(
                 (emp) => emp.email === employee.email
             );

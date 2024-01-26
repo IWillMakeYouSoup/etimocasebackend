@@ -7,7 +7,7 @@ export class DatabaseService {
         this.database = database;
     }
 
-    getData = (table: string): any[] => {
+    getList = (table: string): any[] => {
         switch (table) {
             case "employees":
                 return this.database;
@@ -34,9 +34,7 @@ export class DatabaseService {
     delete = (table: string, id: number): void => {
         switch (table) {
             case "employees":
-                const index = this.database.findIndex(
-                    (employee) => employee.id === id
-                );
+                const index = this.database.findIndex((row) => row.id === id);
                 if (index === -1) throw new Error("Employee not found");
                 this.database.splice(index, 1);
                 break;

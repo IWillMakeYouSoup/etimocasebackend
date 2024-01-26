@@ -8,9 +8,7 @@ export const verifyToken = (
     res: Response,
     next: NextFunction
 ) => {
-    console.log(token);
     const authHeader = req.headers["authorization"];
-    const thing = "test";
 
     if (typeof authHeader !== "undefined") {
         const bearer = authHeader.split(" ");
