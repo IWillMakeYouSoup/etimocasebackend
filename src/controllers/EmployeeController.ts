@@ -1,18 +1,16 @@
 import { NextFunction, Request, Response } from "express";
-import { EmployeeService } from "../services/EmployeeService";
+import employeeService from "../services/EmployeeService";
 
 export const EmployeeController = {
     createEmployee: async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const service = new EmployeeService();
             const employee = req.body;
-            const { success, message } = await service.validateNewEmployee(
-                employee
-            );
+            const { success, message } =
+                await employeeService.validateNewEmployee(employee);
             if (!success) {
                 next({ statusCode: 400, message });
             } else {
-                await service.createEmployee(employee);
+                await employeeService.createEmployee(employee);
                 res.send({ success: true });
             }
         } catch (error: any) {
@@ -21,8 +19,7 @@ export const EmployeeController = {
     },
     ListEmployees: async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const service = new EmployeeService();
-            const employees = await service.getEmployees();
+            const employees = await employeeService.getEmployees();
             res.send(employees);
         } catch (error: any) {
             return next(error);
@@ -30,8 +27,7 @@ export const EmployeeController = {
     },
     deleteEmployee: async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const service = new EmployeeService();
-            await service.deleteEmployee(parseInt(req.params.id));
+            await employeeService.deleteEmployee(parseInt(req.params.id));
         } catch (error: any) {
             return next(error);
         }
