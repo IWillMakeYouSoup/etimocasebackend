@@ -33,4 +33,13 @@ export const EmployeeController = {
         }
         return res.send({ success: true });
     },
+    updateEmployee: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const employee = req.body;
+            await employeeService.updateEmployee(employee);
+        } catch (error: any) {
+            return next(error);
+        }
+        return res.send({ success: true });
+    },
 };

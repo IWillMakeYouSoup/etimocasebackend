@@ -1,4 +1,4 @@
-import { Employee } from "../types/Employee";
+import { Employee, insertEmployee } from "../types/Employee";
 import { DatabaseService } from "./DatabaseService";
 
 export class EmployeeService {
@@ -8,14 +8,14 @@ export class EmployeeService {
     }
 
     getEmployees = async (): Promise<Employee[]> => {
-        return this.dataHandler.getList("employees");
+        return await this.dataHandler.getList<Employee>("employees");
     };
 
-    validateNewEmployee = async ({
+    validateNewEmployee = ({
         firstName,
         familyName,
         email,
-    }: Employee): Promise<{ success: boolean; message: string | null }> => {
+    }: Employee): { success: boolean; message: string | null } => {
         if (!firstName)
             return { success: false, message: "First name is required" };
         if (!familyName)
@@ -26,26 +26,27 @@ export class EmployeeService {
         return { success: true, message: null };
     };
 
-    createEmployee = async (employee: Employee): Promise<Employee> => {
-        try {
-            const employees = await this.dataHandler.getList("employees");
-            const emailAlreadyExists = employees.find(
-                (emp) => emp.email === employee.email
-            );
-            if (emailAlreadyExists)
-                throw new Error("Email already exists in database");
-            return this.dataHandler.create("employees", employee);
-        } catch (error) {
-            throw error;
-        }
+    createEmployee = async (employee: insertEmployee): Promise<Employee> => {
+        const employees: Employee[] = await this.dataHandler.getList<Employee>(
+            "employees"
+        );
+        const emailAlreadyExists = employees.find(
+            (emp) => emp.email === employee.email
+        );
+        if (emailAlreadyExists)
+            throw new Error("Email already exists in database");
+        return this.dataHandler.create<insertEmployee>(
+            "employees",
+            employee
+        ) as Employee;
     };
 
     deleteEmployee = async (id: number): Promise<void> => {
-        try {
-            this.dataHandler.delete("employees", id);
-        } catch (error) {
-            throw error;
-        }
+        this.dataHandler.delete("employees", id);
+    };
+
+    updateEmployee = async (employee: Employee): Promise<void> => {
+        this.dataHandler.update("employees", employee);
     };
 }
 

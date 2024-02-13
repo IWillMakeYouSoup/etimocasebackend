@@ -1,4 +1,3 @@
-import { Employee } from "src/types/Employee";
 import { employeesMock } from "../store/employeesMock";
 import { DatabaseService } from "./DatabaseService";
 
